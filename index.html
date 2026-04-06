@@ -60,9 +60,15 @@
   .nav-logo span { color: var(--red); }
 
   .nav-links {
-    display: flex; gap: 2.5rem;
+    /* Desktop: fixed at top-right, visually part of the navbar */
+    position: fixed; top: 0; right: 2rem;
+    display: flex; flex-direction: row; gap: 2.5rem;
     list-style: none; align-items: center;
+    padding: 1.4rem 0;
+    z-index: 100;
+    transition: padding 0.4s;
   }
+  #navbar.scrolled ~ .nav-links { padding: 0.9rem 0; }
   .nav-links a {
     color: var(--cream); text-decoration: none;
     font-size: 0.75rem; font-weight: 500;
