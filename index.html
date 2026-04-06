@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bar Splendor Cubano — Cócteles & Cocina Cubana | Madrid</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --rum:      #1A0802;
+    --mahogany: #2D1206;
+    --tobacco:  #3D1F0A;
+    --red:      #C0392B;
+    --red-dk:   #96231C;
+    --gold:     #D4A017;
+    --gold-lt:  #F0C040;
+    --green:    #1A6B3A;
+    --cream:    #F5E6C8;
+    --cream-dk: #E8D0A0;
+    --muted:    #9B7A50;
+    --white:    #FFFDF7;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--rum);
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--rum); }
+  ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
+
+  /* ─── NAVBAR ─── */
+  #navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.4rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background 0.4s, padding 0.4s, border-color 0.4s;
+  }
+  #navbar.scrolled {
+    background: #1A0802;
+    padding: 0.9rem 2rem;
+    border-bottom: 1px solid rgba(192,57,43,0.3);
+    box-shadow: 0 4px 40px rgba(0,0,0,0.7);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem; letter-spacing: 3px;
+    color: var(--gold); text-decoration: none;
+    line-height: 1;
+  }
+  .nav-logo span { color: var(--red); }
+
+  .nav-links {
+    display: flex; gap: 2.5rem;
+    list-style: none; align-items: center;
+  }
+  .nav-links a {
+    color: var(--cream); text-decoration: none;
+    font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    opacity: 0.75; transition: opacity 0.2s, color 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--gold); }
+  .nav-cta {
+    background: var(--red) !important; color: var(--white) !important;
+    opacity: 1 !important; padding: 0.5rem 1.3rem;
+    border-radius: 2px; letter-spacing: 2px !important;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--red-dk) !important; }
+
+  .burger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; background: none; border: none; padding: 4px;
+  }
+  .burger span {
+    display: block; width: 25px; height: 2px;
+    background: var(--cream); border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .burger.open span:nth-child(2) { opacity: 0; }
+  .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav-overlay {
+    display: none; position: fixed; inset: 0; z-index: 150;
+    background: rgba(0,0,0,0.75); opacity: 0;
+    pointer-events: none; transition: opacity 0.3s;
+  }
+  .nav-overlay.open { opacity: 1; pointer-events: all; }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Diagonal stripe pattern — Cuban flag tribute */
+  .hero-stripes {
+    position: absolute; inset: 0; opacity: 0.035;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--red) 0px, var(--red) 2px,
+      transparent 2px, transparent 40px
+    );
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 30%, rgba(192,57,43,0.22) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 70% at 15% 80%, rgba(26,107,58,0.15) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 60% at 85% 70%, rgba(212,160,23,0.1) 0%, transparent 55%),
+      linear-gradient(180deg, #0D0401 0%, #1A0802 50%, #2D1206 100%);
+  }
+
+  /* Decorative star — Cuban flag */
+  .hero-star {
+    position: absolute; top: 12%; left: 8%;
+    font-size: 5rem; opacity: 0.06; color: var(--gold);
+    animation: slowSpin 40s linear infinite;
+  }
+  .hero-star-2 {
+    position: absolute; bottom: 15%; right: 6%;
+    font-size: 3.5rem; opacity: 0.05; color: var(--red);
+    animation: slowSpin 30s linear infinite reverse;
+  }
+  @keyframes slowSpin { to { transform: rotate(360deg); } }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center; padding: 2rem 1.5rem;
+    max-width: 860px;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    font-size: 0.68rem; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.2rem;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: '★'; font-size: 0.5rem;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4.5rem, 16vw, 11rem);
+    line-height: 0.85; letter-spacing: 4px;
+    color: var(--cream);
+    opacity: 0; animation: fadeUp 0.9s 0.35s forwards;
+  }
+  .hero-title .accent { color: var(--red); }
+  .hero-title .small {
+    display: block; font-size: 0.38em;
+    letter-spacing: 12px; color: var(--gold);
+    margin-top: 0.2em;
+  }
+
+  .hero-tagline {
+    margin-top: 1.5rem; font-size: 1rem; font-weight: 300;
+    letter-spacing: 0.5px; color: rgba(245,230,200,0.65);
+    font-style: italic;
+    opacity: 0; animation: fadeUp 0.9s 0.55s forwards;
+  }
+
+  .hero-rule {
+    width: 80px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 2rem auto;
+    opacity: 0; animation: fadeUp 0.9s 0.65s forwards;
+  }
+
+  .hero-actions {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+  }
+  .btn-primary {
+    display: inline-block; padding: 1rem 2.5rem;
+    background: var(--red); color: var(--white);
+    text-decoration: none; font-size: 0.73rem;
+    letter-spacing: 3px; text-transform: uppercase; font-weight: 600;
+    border-radius: 1px; transition: background 0.25s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--red-dk); transform: translateY(-2px); }
+  .btn-ghost {
+    display: inline-block; padding: 1rem 2.5rem;
+    border: 1px solid rgba(212,160,23,0.5); color: var(--gold);
+    text-decoration: none; font-size: 0.73rem;
+    letter-spacing: 3px; text-transform: uppercase; font-weight: 600;
+    border-radius: 1px; transition: border-color 0.25s, background 0.25s, transform 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--gold); background: rgba(212,160,23,0.08); transform: translateY(-2px); }
+
+  .hero-stats {
+    margin-top: 3.5rem;
+    display: flex; gap: 3rem; justify-content: center; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.9s 1s forwards;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem; letter-spacing: 2px; color: var(--gold); line-height: 1;
+  }
+  .hero-stat-label {
+    font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--muted); margin-top: 0.3rem;
+  }
+
+  .scroll-cue {
+    position: absolute; bottom: 2rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    color: var(--muted); font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase;
+    animation: nudge 2.5s ease-in-out infinite;
+  }
+  .scroll-cue::after {
+    content: ''; width: 1px; height: 36px;
+    background: linear-gradient(var(--gold), transparent);
+  }
+  @keyframes nudge {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(5px); }
+  }
+
+  /* ─── SECTION SHARED ─── */
+  section { padding: 7rem 1.5rem; }
+  .inner { max-width: 1100px; margin: 0 auto; }
+
+  .section-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    font-size: 0.65rem; letter-spacing: 5px; text-transform: uppercase; color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  .section-eyebrow::before { content: '★'; font-size: 0.55rem; }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    letter-spacing: 3px; line-height: 0.9; color: var(--cream);
+  }
+  .section-title .accent { color: var(--red); }
+
+  .ornament {
+    display: flex; align-items: center; gap: 1rem; margin: 1.5rem 0;
+  }
+  .ornament::before, .ornament::after {
+    content: ''; flex: 1; height: 1px; background: rgba(212,160,23,0.25);
+  }
+  .ornament span { color: var(--gold); font-size: 0.9rem; }
+
+  /* ─── VIBE STRIP ─── */
+  #vibe {
+    background: var(--mahogany);
+    padding: 3rem 1.5rem; overflow: hidden;
+    border-top: 1px solid rgba(192,57,43,0.2);
+    border-bottom: 1px solid rgba(192,57,43,0.2);
+  }
+  .marquee-track {
+    display: flex; gap: 3rem; white-space: nowrap;
+    animation: marquee 18s linear infinite;
+  }
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--muted); flex-shrink: 0;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .marquee-item span { color: var(--red); font-size: 0.7rem; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  /* ─── ABOUT ─── */
+  #about { background: var(--tobacco); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+  }
+
+  .about-text p {
+    font-size: 1rem; line-height: 1.9; color: rgba(245,230,200,0.72);
+    font-weight: 300; margin-bottom: 1.5rem;
+  }
+  .about-text p strong { color: var(--gold); font-weight: 500; }
+
+  .about-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
+  .tag {
+    font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+    border: 1px solid rgba(212,160,23,0.3); color: var(--gold);
+    padding: 0.35rem 0.8rem; border-radius: 1px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .tag:hover { background: rgba(212,160,23,0.1); border-color: var(--gold); }
+
+  .about-visual { display: flex; flex-direction: column; gap: 1rem; }
+  .about-card {
+    background: rgba(192,57,43,0.08); border: 1px solid rgba(192,57,43,0.18);
+    border-radius: 2px; padding: 2rem;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .about-card:hover { border-color: rgba(192,57,43,0.4); background: rgba(192,57,43,0.14); }
+  .about-card-icon { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
+  .about-card h3 {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
+    letter-spacing: 2px; color: var(--cream); margin-bottom: 0.4rem;
+  }
+  .about-card p { font-size: 0.83rem; color: var(--muted); line-height: 1.65; }
+
+  /* ─── DRINKS ─── */
+  #drinks { background: var(--rum); }
+  .drinks-header { text-align: center; margin-bottom: 4rem; }
+
+  .drinks-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: rgba(212,160,23,0.12);
+    border: 1px solid rgba(212,160,23,0.12);
+  }
+  .drink-card {
+    background: var(--rum); padding: 2.5rem 2rem;
+    position: relative; overflow: hidden;
+    transition: background 0.3s;
+  }
+  .drink-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px; background: var(--gold);
+    transform: scaleX(0); transition: transform 0.35s; transform-origin: left;
+  }
+  .drink-card:hover { background: var(--mahogany); }
+  .drink-card:hover::after { transform: scaleX(1); }
+  .drink-card .emoji { font-size: 2.4rem; display: block; margin-bottom: 1rem; }
+  .drink-card h3 {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem;
+    letter-spacing: 2px; color: var(--cream); margin-bottom: 0.5rem;
+  }
+  .drink-card p { font-size: 0.83rem; color: var(--muted); line-height: 1.65; }
+  .drink-card .badge {
+    display: inline-block; margin-top: 1rem;
+    font-size: 0.62rem; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--red); border: 1px solid rgba(192,57,43,0.35);
+    padding: 0.25rem 0.65rem; border-radius: 1px;
+  }
+
+  /* ─── RED BANNER ─── */
+  #banner {
+    background: var(--red);
+    padding: 4.5rem 1.5rem; text-align: center;
+  }
+  #banner h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 8vw, 5.5rem);
+    letter-spacing: 6px; color: var(--white); line-height: 0.9;
+    margin-bottom: 1rem;
+  }
+  #banner p {
+    color: rgba(255,255,255,0.75); font-size: 1rem;
+    font-style: italic; max-width: 500px; margin: 0 auto 2rem;
+  }
+  #banner a.btn-white {
+    display: inline-block; padding: 0.9rem 2.5rem;
+    background: var(--white); color: var(--red);
+    text-decoration: none; font-size: 0.75rem;
+    letter-spacing: 3px; text-transform: uppercase; font-weight: 700;
+    border-radius: 1px; transition: transform 0.2s;
+  }
+  #banner a.btn-white:hover { transform: translateY(-2px); }
+
+  /* ─── COMIDA ─── */
+  #food { background: var(--tobacco); }
+  .food-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 3rem; }
+  .food-item {
+    display: flex; gap: 1.25rem; padding: 1.5rem;
+    background: rgba(212,160,23,0.05); border: 1px solid rgba(212,160,23,0.1);
+    border-radius: 2px; align-items: flex-start;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .food-item:hover { border-color: rgba(212,160,23,0.3); background: rgba(212,160,23,0.09); }
+  .food-item .icon { font-size: 1.8rem; flex-shrink: 0; margin-top: 2px; }
+  .food-item h3 {
+    font-family: 'Playfair Display', serif; font-size: 1.1rem;
+    color: var(--cream); margin-bottom: 0.3rem; font-weight: 600;
+  }
+  .food-item p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+  /* ─── MUSIC ─── */
+  #music {
+    background: linear-gradient(135deg, var(--green) 0%, #0D3D20 60%, var(--rum) 100%);
+    padding: 6rem 1.5rem; text-align: center; position: relative; overflow: hidden;
+  }
+  #music::before {
+    content: '♪ ♫ ♩ ♬';
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 8rem; opacity: 0.04; letter-spacing: 2rem;
+    color: var(--white); pointer-events: none;
+  }
+  #music .section-title { color: var(--white); }
+  #music p {
+    max-width: 580px; margin: 1.5rem auto 0;
+    font-size: 1rem; line-height: 1.8;
+    color: rgba(255,255,255,0.7); font-weight: 300;
+  }
+  .music-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+  .music-tag {
+    font-size: 0.73rem; letter-spacing: 2.5px; text-transform: uppercase;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white); padding: 0.5rem 1.2rem; border-radius: 50px;
+    backdrop-filter: blur(4px);
+  }
+
+  /* ─── HOURS + CONTACT ─── */
+  #info { background: var(--mahogany); }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
+
+  .hours-list { margin-top: 2rem; }
+  .hours-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.8rem 0; border-bottom: 1px solid rgba(212,160,23,0.1);
+    font-size: 0.88rem;
+  }
+  .hours-row .day { color: var(--muted); letter-spacing: 1px; }
+  .hours-row .time { color: var(--cream); }
+  .hours-row.closed .day, .hours-row.closed .time { opacity: 0.3; font-style: italic; }
+  .hours-row.today .day { color: var(--gold); font-weight: 600; }
+  .hours-row.today .time { color: var(--gold); }
+  .peak-note {
+    margin-top: 1rem; font-size: 0.75rem;
+    color: var(--muted); font-style: italic; line-height: 1.6;
+  }
+  .peak-note strong { color: var(--red); font-style: normal; }
+
+  .contact-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+  .contact-item {
+    display: flex; gap: 1.25rem; padding: 1.25rem 1.5rem;
+    background: rgba(192,57,43,0.07); border: 1px solid rgba(192,57,43,0.15);
+    border-radius: 2px; align-items: flex-start;
+    transition: border-color 0.3s;
+  }
+  .contact-item:hover { border-color: rgba(192,57,43,0.4); }
+  .contact-item .ci-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+  .contact-item strong {
+    display: block; font-size: 0.65rem; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--red); margin-bottom: 0.3rem;
+  }
+  .contact-item span { font-size: 0.87rem; color: rgba(245,230,200,0.7); line-height: 1.5; }
+  .contact-item a { color: var(--gold); text-decoration: none; }
+  .contact-item a:hover { text-decoration: underline; }
+
+  /* social row */
+  .social-row { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .social-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
+    border: 1px solid rgba(212,160,23,0.3); color: var(--gold);
+    padding: 0.5rem 1rem; border-radius: 1px; text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .social-btn:hover { background: rgba(212,160,23,0.1); border-color: var(--gold); }
+
+  /* ─── MAP ─── */
+  #map { background: var(--rum); padding: 0; }
+  .map-head { text-align: center; padding: 5rem 1.5rem 3rem; }
+  .map-frame {
+    width: 100%; height: 400px;
+    filter: sepia(30%) saturate(60%) hue-rotate(330deg);
+  }
+  .map-frame iframe { width: 100%; height: 100%; border: none; display: block; }
+  .map-bar {
+    background: var(--mahogany); padding: 1.25rem 2rem;
+    display: flex; align-items: center; justify-content: center;
+    gap: 2rem; flex-wrap: wrap;
+    border-top: 1px solid rgba(192,57,43,0.25);
+  }
+  .map-bar a {
+    color: var(--gold); text-decoration: none;
+    font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase;
+    display: flex; align-items: center; gap: 0.5rem;
+    transition: color 0.2s;
+  }
+  .map-bar a:hover { color: var(--cream); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #0D0401; padding: 2.5rem 1.5rem;
+    border-top: 1px solid rgba(192,57,43,0.2);
+  }
+  .footer-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;
+  }
+  .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; color: var(--gold); }
+  .footer-brand span { color: var(--red); }
+  .footer-nav { display: flex; gap: 2rem; list-style: none; }
+  .footer-nav a { color: var(--muted); text-decoration: none; font-size: 0.75rem; letter-spacing: 1px; transition: color 0.2s; }
+  .footer-nav a:hover { color: var(--gold); }
+  .footer-copy { font-size: 0.7rem; color: var(--muted); opacity: 0.6; letter-spacing: 1px; }
+
+  /* floating call */
+  .fab {
+    display: none; position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 90;
+    background: var(--red); color: var(--white);
+    border-radius: 50px; padding: 0.85rem 1.5rem;
+    text-decoration: none; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
+    box-shadow: 0 6px 30px rgba(192,57,43,0.5);
+    transition: background 0.2s, transform 0.2s; font-weight: 600;
+  }
+  .fab:hover { background: var(--red-dk); transform: translateY(-2px); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .d1 { transition-delay: 0.1s; }
+  .d2 { transition-delay: 0.2s; }
+  .d3 { transition-delay: 0.3s; }
+  .d4 { transition-delay: 0.4s; }
+  .d5 { transition-delay: 0.5s; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .info-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .drinks-grid { grid-template-columns: 1fr 1fr; }
+    .food-grid { grid-template-columns: 1fr; }
+    .burger { display: flex; }
+    .fab { display: flex; }
+
+    /* mobile nav — transform only, no display toggle */
+    .nav-links {
+      position: fixed; inset: 0; z-index: 200;
+      background: #1A0802;
+      display: flex;
+      flex-direction: column; justify-content: center; align-items: center;
+      gap: 2.5rem; list-style: none;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .nav-links.open { transform: translateX(0); }
+    .nav-links a { font-size: 1rem; letter-spacing: 4px; opacity: 1; }
+    .nav-cta { padding: 0.6rem 1.5rem !important; }
+    .nav-overlay { display: block; }
+  }
+
+  @media (max-width: 600px) {
+    .drinks-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 2rem; }
+    .footer-inner { flex-direction: column; text-align: center; }
+    .footer-nav { justify-content: center; }
+    .marquee-track { gap: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Splendor <span>Cubano</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">Nosotros</a></li>
+    <li><a href="#drinks">Cócteles</a></li>
+    <li><a href="#food">Comida</a></li>
+    <li><a href="#music">Música</a></li>
+    <li><a href="#info">Horarios</a></li>
+    <li><a href="tel:+34698220283" class="nav-cta">Reservar</a></li>
+  </ul>
+  <button class="burger" id="burger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-overlay" id="navOverlay"></div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-stripes"></div>
+  <div class="hero-star">★</div>
+  <div class="hero-star-2">★</div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Madrid · Usera · Desde La Habana</div>
+    <h1 class="hero-title">
+      <span class="accent">Splendor</span><br>Cubano
+      <span class="small">Bar · Cócteles · Música</span>
+    </h1>
+    <p class="hero-tagline">Donde el ron, la salsa y la alegría cubana se encuentran en Madrid</p>
+    <div class="hero-rule"></div>
+    <div class="hero-actions">
+      <a href="#drinks" class="btn-primary">Ver Carta</a>
+      <a href="tel:+34698220283" class="btn-ghost">Llamar Ahora</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">4.7★</div>
+        <div class="hero-stat-label">TripAdvisor</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">Halal</div>
+        <div class="hero-stat-label">Certificado</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">Live</div>
+        <div class="hero-stat-label">Música en directo</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">50+</div>
+        <div class="hero-stat-label">Aforo</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue">Descubre</div>
+</section>
+
+<!-- VIBE MARQUEE -->
+<div id="vibe">
+  <div class="marquee-track" aria-hidden="true">
+    <div class="marquee-item">Mojito <span>★</span></div>
+    <div class="marquee-item">Salsa <span>★</span></div>
+    <div class="marquee-item">Ron Cubano <span>★</span></div>
+    <div class="marquee-item">Ropa Vieja <span>★</span></div>
+    <div class="marquee-item">Daiquiri <span>★</span></div>
+    <div class="marquee-item">Son Cubano <span>★</span></div>
+    <div class="marquee-item">Piña Colada <span>★</span></div>
+    <div class="marquee-item">La Habana <span>★</span></div>
+    <div class="marquee-item">Mojito <span>★</span></div>
+    <div class="marquee-item">Salsa <span>★</span></div>
+    <div class="marquee-item">Ron Cubano <span>★</span></div>
+    <div class="marquee-item">Ropa Vieja <span>★</span></div>
+    <div class="marquee-item">Daiquiri <span>★</span></div>
+    <div class="marquee-item">Son Cubano <span>★</span></div>
+    <div class="marquee-item">Piña Colada <span>★</span></div>
+    <div class="marquee-item">La Habana <span>★</span></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="inner">
+    <div class="about-grid">
+      <div>
+        <div class="section-eyebrow reveal">Nuestra Historia</div>
+        <h2 class="section-title reveal d1">La <span class="accent">Habana</span><br>en Madrid</h2>
+        <div class="ornament reveal d2"><span>★</span></div>
+        <div class="about-text">
+          <p class="reveal d2">En el corazón del barrio de <strong>Usera</strong>, Bar Splendor Cubano nació con una misión: traer la auténtica esencia de Cuba a Madrid. Cada mojito que preparamos, cada nota de salsa que suena, cada plato de ropa vieja que sale de nuestra cocina lleva el alma de la isla.</p>
+          <p class="reveal d3">De la mano de <strong>Yanara</strong>, hemos creado un espacio donde la cultura cubana vive y respira. Un lugar para bailar, reír, disfrutar y sentirse, aunque sea por una noche, en las calles de La Habana.</p>
+        </div>
+        <div class="about-tags reveal d4">
+          <span class="tag">Música en Directo</span>
+          <span class="tag">DJ Salsa & Reggaeton</span>
+          <span class="tag">Cocina Cubana</span>
+          <span class="tag">Cócteles Artesanales</span>
+          <span class="tag">Takeaway</span>
+          <span class="tag">Grupos & Eventos</span>
+        </div>
+      </div>
+      <div class="about-visual reveal d2">
+        <div class="about-card">
+          <span class="about-card-icon">🕺</span>
+          <h3>Baile & Fiesta</h3>
+          <p>Los fines de semana el local se transforma. Salsa, son cubano y reggaeton hasta las 4h de la mañana. Espacio para bailar garantizado.</p>
+        </div>
+        <div class="about-card">
+          <span class="about-card-icon">🎵</span>
+          <h3>Música en Vivo</h3>
+          <p>Actuaciones de música cubana y caribeña en directo. DJ sets que te llevarán desde el son clásico hasta el más festivo reggaeton.</p>
+        </div>
+        <div class="about-card">
+          <span class="about-card-icon">🥃</span>
+          <h3>Ron & Cócteles</h3>
+          <p>Mojitos considerados entre los mejores de Madrid. Daiquiris, piñas coladas y más de 20 combinados con los mejores rones cubanos.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COCKTAILS -->
+<section id="drinks">
+  <div class="inner">
+    <div class="drinks-header">
+      <div class="section-eyebrow reveal">Barra</div>
+      <h2 class="section-title reveal d1">Los Mejores <span class="accent">Cócteles</span></h2>
+      <div class="ornament reveal d2"><span>★</span></div>
+    </div>
+    <div class="drinks-grid">
+      <div class="drink-card reveal">
+        <span class="emoji">🍃</span>
+        <h3>Mojito</h3>
+        <p>Ron blanco cubano, lima fresca, hierbabuena, azúcar y soda. Preparado a mano, uno a uno. El mejor de Madrid según nuestros clientes.</p>
+        <span class="badge">El Clásico</span>
+      </div>
+      <div class="drink-card reveal d1">
+        <span class="emoji">🍓</span>
+        <h3>Daiquiri</h3>
+        <p>Ron blanco, zumo de lima y azúcar. Tres ingredientes, una perfección. Disponible natural, de fresa o de mango.</p>
+        <span class="badge">Favorito</span>
+      </div>
+      <div class="drink-card reveal d2">
+        <span class="emoji">🍍</span>
+        <h3>Piña Colada</h3>
+        <p>Ron cubano, crema de coco y piña natural. Cremosa, tropical y irresistible. Un viaje al Caribe en cada sorbo.</p>
+        <span class="badge">Tropical</span>
+      </div>
+      <div class="drink-card reveal d3">
+        <span class="emoji">🥃</span>
+        <h3>Cuba Libre</h3>
+        <p>Ron cubano añejo con cola bien fría y un toque de lima. El combinado de Cuba por excelencia, servido con hielo a raudales.</p>
+        <span class="badge">Icónico</span>
+      </div>
+      <div class="drink-card reveal d4">
+        <span class="emoji">🍺</span>
+        <h3>Cerveza Estrella</h3>
+        <p>Bien fría, siempre fría. Estrella Galicia de barril para los que prefieren ir directo al grano. Perfecta con cualquier ración.</p>
+        <span class="badge">De Barril</span>
+      </div>
+      <div class="drink-card reveal d5">
+        <span class="emoji">🫚</span>
+        <h3>Ron Añejo</h3>
+        <p>Selección de rones cubanos añejos para degustar solos o con hielo. Pídele al barman la recomendación del día.</p>
+        <span class="badge">Premium</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RED BANNER -->
+<section id="banner">
+  <h2>¿Listo para<br>la fiesta?</h2>
+  <p>Cada noche es una celebración. Reserva tu mesa y ven a vivir la experiencia cubana.</p>
+  <a href="tel:+34698220283" class="btn-white">📞 Reservar Mesa</a>
+</section>
+
+<!-- FOOD -->
+<section id="food">
+  <div class="inner">
+    <div class="section-eyebrow reveal">Cocina Cubana</div>
+    <h2 class="section-title reveal d1">Sabores de <span class="accent">Cuba</span></h2>
+    <div class="ornament reveal d2"><span>★</span></div>
+    <div class="food-grid">
+      <div class="food-item reveal d1">
+        <div class="icon">🥩</div>
+        <div>
+          <h3>Ropa Vieja</h3>
+          <p>El plato nacional de Cuba. Ternera deshilachada cocinada con tomate, pimiento y especias. Receta del oriente cubano.</p>
+        </div>
+      </div>
+      <div class="food-item reveal d2">
+        <div class="icon">🥖</div>
+        <div>
+          <h3>Bocadillo de Carne Mechada</h3>
+          <p>Carne de cerdo tierna y jugosa en pan crujiente. El bocadillo cubano más popular, preparado al momento.</p>
+        </div>
+      </div>
+      <div class="food-item reveal d3">
+        <div class="icon">🌿</div>
+        <div>
+          <h3>Yuca con Mojo</h3>
+          <p>Yuca cocida y frita bañada en mojo cubano de ajo y naranja agria. La guarnición cubana por excelencia.</p>
+        </div>
+      </div>
+      <div class="food-item reveal d4">
+        <div class="icon">🫙</div>
+        <div>
+          <h3>Tapas & Raciones</h3>
+          <p>Selección de aperitivos y raciones españolas y cubanas para picar mientras disfrutas de la música y los cócteles.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MUSIC -->
+<section id="music">
+  <div class="section-eyebrow reveal" style="justify-content:center;display:flex;">La Música</div>
+  <h2 class="section-title reveal d1" style="text-align:center;">La Banda <span class="accent">Sonora</span><br>de la Noche</h2>
+  <p class="reveal d2">Desde el son clásico cubano hasta el reggaeton más actual. Los jueves se calientan, los viernes explotan y los sábados no tienen techo. Ven a bailar.</p>
+  <div class="music-tags reveal d3">
+    <span class="music-tag">🎷 Son Cubano</span>
+    <span class="music-tag">💃 Salsa</span>
+    <span class="music-tag">🎵 Reggaeton</span>
+    <span class="music-tag">🥁 Música Caribeña</span>
+    <span class="music-tag">🎤 Actuaciones en Directo</span>
+    <span class="music-tag">🎧 DJ Sets</span>
+  </div>
+</section>
+
+<!-- HOURS + CONTACT -->
+<section id="info">
+  <div class="inner">
+    <div class="info-grid">
+      <div>
+        <div class="section-eyebrow reveal">Horario</div>
+        <h2 class="section-title reveal d1">Cuándo <span class="accent">Vernos</span></h2>
+        <div class="hours-list reveal d2">
+          <div class="hours-row closed"><span class="day">Lunes</span><span class="time">Cerrado</span></div>
+          <div class="hours-row closed"><span class="day">Martes</span><span class="time">Cerrado</span></div>
+          <div class="hours-row"><span class="day">Miércoles</span><span class="time">20:00 – 02:00</span></div>
+          <div class="hours-row"><span class="day">Jueves</span><span class="time">20:00 – 03:00</span></div>
+          <div class="hours-row"><span class="day">Viernes</span><span class="time">20:00 – 04:00</span></div>
+          <div class="hours-row"><span class="day">Sábado</span><span class="time">20:00 – 04:00</span></div>
+          <div class="hours-row"><span class="day">Domingo</span><span class="time">20:00 – 02:00</span></div>
+        </div>
+        <p class="peak-note">🔥 Momentos pico: <strong>Viernes 22h–00h</strong> y <strong>Sábados 23h–01h</strong>. Para asegurar mesa te recomendamos reservar.</p>
+      </div>
+      <div>
+        <div class="section-eyebrow reveal">Contacto</div>
+        <h2 class="section-title reveal d1">Dónde <span class="accent">Estamos</span></h2>
+        <div class="contact-list">
+          <div class="contact-item reveal d2">
+            <div class="ci-icon">📍</div>
+            <div>
+              <strong>Dirección</strong>
+              <span>C. de Almendrales, 25<br>Usera, 28026 Madrid</span>
+            </div>
+          </div>
+          <div class="contact-item reveal d3">
+            <div class="ci-icon">📞</div>
+            <div>
+              <strong>Teléfono</strong>
+              <span><a href="tel:+34698220283">+34 698 22 02 83</a></span>
+            </div>
+          </div>
+          <div class="contact-item reveal d4">
+            <div class="ci-icon">🚇</div>
+            <div>
+              <strong>Metro</strong>
+              <span>Almendrales — Línea 3<br>Usera — Línea 6</span>
+            </div>
+          </div>
+          <div class="contact-item reveal d5">
+            <div class="ci-icon">✉️</div>
+            <div>
+              <strong>Email</strong>
+              <span><a href="mailto:yaniemir25@gmail.com">yaniemir25@gmail.com</a></span>
+            </div>
+          </div>
+        </div>
+        <div class="social-row reveal d3">
+          <a href="https://www.tiktok.com/@splendor.cubano" target="_blank" class="social-btn">🎵 TikTok</a>
+          <a href="https://www.instagram.com/sple.ndorcubano" target="_blank" class="social-btn">📸 Instagram</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section id="map">
+  <div class="map-head">
+    <div class="section-eyebrow reveal" style="justify-content:center;display:flex;">Ubicación</div>
+    <h2 class="section-title reveal d1" style="text-align:center;">Usera, <span class="accent">Madrid</span></h2>
+  </div>
+  <div class="map-frame">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3038.5!2d-3.7080!3d40.3930!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xc6dfade93849cdd0!2sBar+Splendor+Cubano!5e0!3m2!1ses!2ses!4v1"
+      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+  <div class="map-bar">
+    <a href="https://www.google.com/maps/search/?api=1&query=Bar%20Splendor%20Cubano&query_place_id=ChIJoxYG37MnQg0R0M1JOI6t38Y" target="_blank">🗺️ Abrir en Maps</a>
+    <a href="tel:+34698220283">📞 +34 698 22 02 83</a>
+    <a href="https://www.google.com/maps/dir/?api=1&destination=C.+de+Almendrales+25+Usera+Madrid" target="_blank">🧭 Cómo llegar</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Splendor <span>Cubano</span></div>
+    <ul class="footer-nav">
+      <li><a href="#about">Nosotros</a></li>
+      <li><a href="#drinks">Cócteles</a></li>
+      <li><a href="#food">Comida</a></li>
+      <li><a href="#music">Música</a></li>
+      <li><a href="#info">Horarios</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 Bar Splendor Cubano · Usera, Madrid</p>
+  </div>
+</footer>
+
+<!-- FAB -->
+<a href="tel:+34698220283" class="fab">📞 Reservar</a>
+
+<script>
+  // NAVBAR SCROLL
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  // MOBILE MENU
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('navLinks');
+  const navOverlay = document.getElementById('navOverlay');
+
+  function closeMenu() {
+    burger.classList.remove('open');
+    navLinks.classList.remove('open');
+    navOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  burger.addEventListener('click', () => {
+    const opening = !navLinks.classList.contains('open');
+    if (opening) {
+      burger.classList.add('open');
+      navLinks.classList.add('open');
+      navOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    } else {
+      closeMenu();
+    }
+  });
+  navOverlay.addEventListener('click', closeMenu);
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+  // SCROLL REVEAL
+  const revealEls = document.querySelectorAll('.reveal');
+  const ro = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => ro.observe(el));
+
+  // HIGHLIGHT TODAY
+  const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const today = days[new Date().getDay()];
+  document.querySelectorAll('.hours-row').forEach(row => {
+    if (row.querySelector('.day')?.textContent.trim() === today) row.classList.add('today');
+  });
+
+  // ACTIVE NAV
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(a => {
+          const active = a.getAttribute('href') === '#' + e.target.id;
+          a.style.color = active ? 'var(--gold)' : '';
+          a.style.opacity = active ? '1' : '';
+        });
+      }
+    });
+  }, { threshold: 0.4 }).observe(document.querySelectorAll('section[id]')[0]);
+  sections.forEach(s => {
+    new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          links.forEach(a => {
+            const active = a.getAttribute('href') === '#' + e.target.id;
+            a.style.color = active ? 'var(--gold)' : '';
+            a.style.opacity = active ? '1' : '';
+          });
+        }
+      });
+    }, { threshold: 0.4 }).observe(s);
+  });
+</script>
+</body>
+</html>
