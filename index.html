@@ -537,20 +537,29 @@
     .burger { display: flex; }
     .fab { display: flex; }
 
-    /* mobile nav — transform only, no display toggle */
+    /* mobile nav — visibility/opacity toggle, no position conflicts */
     .nav-links {
-      position: fixed; inset: 0; z-index: 200;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 300;
       background: #1A0802;
       display: flex;
       flex-direction: column; justify-content: center; align-items: center;
       gap: 2.5rem; list-style: none;
-      transform: translateX(100%);
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s ease, visibility 0.28s;
     }
-    .nav-links.open { transform: translateX(0); }
-    .nav-links a { font-size: 1rem; letter-spacing: 4px; opacity: 1; }
-    .nav-cta { padding: 0.6rem 1.5rem !important; }
-    .nav-overlay { display: block; }
+    .nav-links.open {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .nav-links a { font-size: 1.1rem; letter-spacing: 4px; opacity: 1; color: var(--cream); pointer-events: auto; }
+    .nav-cta { padding: 0.6rem 1.5rem !important; opacity: 1 !important; }
+    .nav-overlay { display: block; z-index: 200; }
   }
 
   @media (max-width: 600px) {
@@ -567,18 +576,19 @@
 <!-- NAVBAR -->
 <nav id="navbar">
   <a href="#hero" class="nav-logo">Splendor <span>Cubano</span></a>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#about">Nosotros</a></li>
-    <li><a href="#drinks">Cócteles</a></li>
-    <li><a href="#food">Comida</a></li>
-    <li><a href="#music">Música</a></li>
-    <li><a href="#info">Horarios</a></li>
-    <li><a href="tel:+34698220283" class="nav-cta">Reservar</a></li>
-  </ul>
   <button class="burger" id="burger" aria-label="Menú">
     <span></span><span></span><span></span>
   </button>
 </nav>
+<!-- nav panel and overlay are direct body children — no stacking context conflict -->
+<ul class="nav-links" id="navLinks">
+  <li><a href="#about">Nosotros</a></li>
+  <li><a href="#drinks">Cócteles</a></li>
+  <li><a href="#food">Comida</a></li>
+  <li><a href="#music">Música</a></li>
+  <li><a href="#info">Horarios</a></li>
+  <li><a href="tel:+34698220283" class="nav-cta">Reservar</a></li>
+</ul>
 <div class="nav-overlay" id="navOverlay"></div>
 
 <!-- HERO -->
@@ -908,7 +918,6 @@
     burger.classList.remove('open');
     navLinks.classList.remove('open');
     navOverlay.classList.remove('open');
-    document.body.style.overflow = '';
   }
   burger.addEventListener('click', () => {
     const opening = !navLinks.classList.contains('open');
@@ -916,7 +925,6 @@
       burger.classList.add('open');
       navLinks.classList.add('open');
       navOverlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
     } else {
       closeMenu();
     }
